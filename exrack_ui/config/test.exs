@@ -8,8 +8,7 @@ config :exrack_ui, ExRackUIWeb.Endpoint,
   server: false
 
 # In test we don't send emails.
-config :exrack_ui, ExRackUI.Mailer,
-  adapter: Swoosh.Adapters.Test
+config :exrack_ui, ExRackUI.Mailer, adapter: Swoosh.Adapters.Test
 
 # Print only warnings and errors during test
 config :logger, level: :warn

@@ -32,9 +32,7 @@ defmodule ExRack.Application do
 
   def children(_target) do
     [
-      # Children for all targets except host
-      # Starts a worker by calling: ExRack.Worker.start_link(arg)
-      # {ExRack.Worker, arg},
+      {ExRack.Fan, ExRack.Fan.config()}
     ]
   end
 

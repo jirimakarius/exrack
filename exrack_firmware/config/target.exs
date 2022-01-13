@@ -55,7 +55,7 @@ config :vintage_net,
      %{
        type: VintageNetEthernet,
        ipv4: %{method: :dhcp}
-     }},
+     }}
   ]
 
 config :mdns_lite,
@@ -88,17 +88,23 @@ config :mdns_lite,
   ]
 
 config :exrack_ui, ExRackUIWeb.Endpoint,
-       url: [host: "exrack.svata.valka.top"],
-       http: [port: 80],
-       cache_static_manifest: "priv/static/cache_manifest.json",
-       secret_key_base: "HEY05EB1dFVSu6KykKHuS4rQPQzSHv4F7mGVB/gnDLrIu75wE/ytBXy2TaL3A6RA",
-       live_view: [signing_salt: "AAAABjEyERMkxgDh"],
-       check_origin: false,
-       render_errors: [view: ExRackUIWeb.ErrorView, accepts: ~w(html json), layout: false],
-       pubsub_server: Ui.PubSub,
-       server: true,
-       code_reloader: false
+  url: [host: "exrack.svata.valka.top"],
+  http: [port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  secret_key_base: "HEY05EB1dFVSu6KykKHuS4rQPQzSHv4F7mGVB/gnDLrIu75wE/ytBXy2TaL3A6RA",
+  live_view: [signing_salt: "AAAABjEyERMkxgDh"],
+  check_origin: false,
+  render_errors: [view: ExRackUIWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Ui.PubSub,
+  server: true,
+  code_reloader: false
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :exrack_firmware, ExRack.Fan,
+  gpio: 12,
+  frequency: 25_000,
+  cycle: 1_000_000
+
 # import_config "#{Mix.target()}.exs"
