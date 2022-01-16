@@ -1,4 +1,4 @@
-defmodule ExRack.Fan do
+defmodule ExRack.FanPwm do
   @moduledoc false
 
   use GenServer
@@ -18,7 +18,7 @@ defmodule ExRack.Fan do
   end
 
   def config() do
-    Application.fetch_env!(:exrack_firmware, ExRack.Fan)
+    Application.fetch_env!(:exrack_firmware, ExRack.FanPwm)
     |> Map.new()
   end
 

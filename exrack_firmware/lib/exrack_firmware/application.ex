@@ -32,7 +32,8 @@ defmodule ExRack.Application do
 
   def children(_target) do
     [
-      {ExRack.Fan, ExRack.Fan.config()}
+      {ExRack.FanPwm, ExRack.FanPwm.config()},
+      {ExRack.FanRpm, ExRack.FanRpm.config()}
     ]
   end
 

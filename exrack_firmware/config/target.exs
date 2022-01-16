@@ -102,9 +102,10 @@ config :exrack_ui, ExRackUIWeb.Endpoint,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :exrack_firmware, ExRack.Fan,
+config :exrack_firmware, ExRack.FanPwm,
   gpio: 12,
   frequency: 25_000,
-  cycle: 1_000_000
+  cycle: 0
 
+config :exrack_firmware, ExRack.FanRpm, fan1: 16
 # import_config "#{Mix.target()}.exs"
