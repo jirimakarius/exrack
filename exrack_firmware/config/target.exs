@@ -108,4 +108,9 @@ config :exrack_firmware, ExRack.FanPwm,
   cycle: 0
 
 config :exrack_firmware, ExRack.FanRpm, fan1: 16
+
+config :exrack_firmware, ExRack.DHT,
+  gpio: 26,
+  sensor: :dht22
+
 # import_config "#{Mix.target()}.exs"

@@ -74,7 +74,7 @@ defmodule ExRack.FanRpm do
     state =
       Enum.map(state, fn {k, v} ->
         case v.gpio do
-          pin_number ->
+          ^pin_number ->
             {k, Map.put(v, :cycles, v.cycles + 1)}
 
           _ ->

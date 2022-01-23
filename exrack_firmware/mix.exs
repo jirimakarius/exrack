@@ -43,6 +43,7 @@ defmodule ExRack.MixProject do
       {:nerves_pack, "~> 0.6.0", targets: @all_targets},
       {:pigpiox, "~> 0.1", targets: @rpi_targets},
       {:circuits_gpio, "~> 1.0.0", targets: @rpi_targets},
+      {:dht, "~> 0.1", targets: @rpi_targets},
 
       # Dependencies for specific targets
       # NOTE: It's generally low risk and recommended to follow minor version
