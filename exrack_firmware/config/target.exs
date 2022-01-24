@@ -105,7 +105,8 @@ config :phoenix, :json_library, Jason
 config :exrack_firmware, ExRack.FanPwm,
   gpio: 12,
   frequency: 25_000,
-  cycle: 0
+  cycle: 0,
+  invert: true
 
 config :exrack_firmware, ExRack.FanRpm, fan1: 16
 

@@ -5,7 +5,7 @@ defmodule ExRack.FanPwm do
 
   # Client
 
-  def start_link(%{:gpio => _gpio, :frequency => _frequency, :cycle => _cycle} = state) do
+  def start_link(%{:gpio => _gpio, :frequency => _frequency} = state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
@@ -25,17 +25,21 @@ defmodule ExRack.FanPwm do
   # Server
 
   @impl true
-  def init(%{:gpio => gpio, :frequency => frequency, :cycle => cycle} = state) do
-    Pigpiox.Pwm.hardware_pwm(gpio, frequency, cycle)
+  def init(%{:gpio => gpio, :frequency => frequency} = state) do
+    invert = Map.get(state, :invert, false)
+    cycle = Map.get(state, :cycle, 0)
+    normalized_cycle = if invert, do: 1_000_000 - cycle, else: cycle
+    Pigpiox.Pwm.hardware_pwm(gpio, frequency, normalized_cycle)
 
-    {:ok, state}
+    {:ok, Map.merge(state, %{:invert => invert, :cycle => cycle})}
   end
 
   @impl true
-  def handle_cast({:cycle, cycle}, %{:gpio => gpio, :frequency => frequency}) do
-    Pigpiox.Pwm.hardware_pwm(gpio, frequency, cycle)
+  def handle_cast({:cycle, cycle}, %{:gpio => gpio, :frequency => frequency, :invert => invert}) do
+    normalized_cycle = if invert, do: 1_000_000 - cycle, else: cycle
+    Pigpiox.Pwm.hardware_pwm(gpio, frequency, normalized_cycle)
 
-    {:noreply, %{:gpio => gpio, :frequency => frequency, :cycle => cycle}}
+    {:noreply, %{:gpio => gpio, :frequency => frequency, :cycle => cycle, :invert => invert}}
   end
 
   @impl true
