@@ -30,6 +30,7 @@ defmodule ExRack.FanPwm do
     cycle = Map.get(state, :cycle, 0)
     normalized_cycle = if invert, do: 1_000_000 - cycle, else: cycle
     Pigpiox.Pwm.hardware_pwm(gpio, frequency, normalized_cycle)
+    :telemetry.execute([:fan, :pwm], %{percent: cycle / 10_000}, %{frequency: frequency})
 
     {:ok, Map.merge(state, %{:invert => invert, :cycle => cycle})}
   end
@@ -38,6 +39,7 @@ defmodule ExRack.FanPwm do
   def handle_cast({:cycle, cycle}, %{:gpio => gpio, :frequency => frequency, :invert => invert}) do
     normalized_cycle = if invert, do: 1_000_000 - cycle, else: cycle
     Pigpiox.Pwm.hardware_pwm(gpio, frequency, normalized_cycle)
+    :telemetry.execute([:fan, :pwm], %{percent: cycle / 10_000}, %{frequency: frequency})
 
     {:noreply, %{:gpio => gpio, :frequency => frequency, :cycle => cycle, :invert => invert}}
   end

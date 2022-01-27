@@ -3,7 +3,7 @@ defmodule ExRack.DHT do
 
   use GenServer
 
-  @period 30_000
+  @period 10_000
 
   # Client
 
@@ -45,6 +45,8 @@ defmodule ExRack.DHT do
     state =
       case DHT.read(gpio, sensor) do
         {:ok, %{:humidity => humidity, :temperature => temperature}} ->
+          :telemetry.execute([:dht, :humididty], %{percent: humidity}, %{sensor: sensor})
+          :telemetry.execute([:dht, :temperature], %{celsius: temperature}, %{sensor: sensor})
           Map.merge(state, %{:temperature => temperature, :humidity => humidity})
 
         _ ->

@@ -17,7 +17,7 @@ defmodule ExRackUIWeb.Router do
   scope "/", ExRackUIWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", TestView
   end
 
   # Other scopes may use custom stacks.

@@ -61,7 +61,10 @@ defmodule ExRack.FanRpm do
   def handle_info(:work, state) do
     state =
       Enum.map(state, fn {k, v} ->
-        {k, Map.merge(v, %{rpm: v.cycles * 1_000 * 30 / @period, cycles: 0})}
+        rpm = v.cycles * 1_000 * 30 / @period
+        :telemetry.execute([:fan, :rpm], %{rpm: rpm}, %{fan: k})
+
+        {k, Map.merge(v, %{rpm: rpm, cycles: 0})}
       end)
 
     schedule_work()

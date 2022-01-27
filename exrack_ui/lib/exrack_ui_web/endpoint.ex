@@ -30,6 +30,8 @@ defmodule ExRackUIWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
+  plug PromEx.Plug, prom_ex_module: ExRackUI.PromEx
+
   plug Phoenix.LiveDashboard.RequestLogger,
     param_key: "request_logger",
     cookie_key: "request_logger"
