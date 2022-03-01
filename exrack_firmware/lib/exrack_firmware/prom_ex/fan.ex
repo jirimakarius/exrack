@@ -18,7 +18,7 @@ defmodule ExRack.PromEx.Fan do
           event_name: [:fan, :pwm],
           measurement: :percent,
           description: "Percentage of Fan PWM cycle",
-          tags: [:frequency]
+          tags: [:frequency, :fan]
         )
       ]
     )

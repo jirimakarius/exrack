@@ -105,15 +105,21 @@ config :exrack_ui, ExRackUI.PromEx, plugins: [ExRack.PromEx.DHT, ExRack.PromEx.F
 config :phoenix, :json_library, Jason
 
 config :exrack_firmware, ExRack.FanPwm,
-  gpio: 12,
-  frequency: 25_000,
-  cycle: 700_000,
-  invert: true
+  hermetic: %{gpio: 12, frequency: 25_000, cycle: 0.0, invert: true, hardware: true},
+  hermetic_spaced: %{gpio: 13, frequency: 25_000, cycle: 0.0, invert: true, hardware: true}
 
-config :exrack_firmware, ExRack.FanRpm, fan1: 16
+config :exrack_firmware, ExRack.FanRpm, hermetic: 2, hermetic_spaced: 3
 
 config :exrack_firmware, ExRack.DHT,
-  gpio: 26,
+  gpio: 2,
   sensor: :dht22
+
+config :exrack_firmware, ExRack.FanPID,
+  kP: 0.28,
+  kI: 0.0,
+  kD: 0.0,
+  setpoint: 25.0,
+  max: 0.4,
+  min: 0.0
 
 # import_config "#{Mix.target()}.exs"

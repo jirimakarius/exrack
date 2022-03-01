@@ -23,6 +23,10 @@ defmodule ExRack.FanRpm do
     Application.fetch_env!(:exrack_firmware, ExRack.FanRpm)
   end
 
+  def subscribe() do
+    GenServer.call(__MODULE__, :subscribe)
+  end
+
   # Server
 
   @impl true
@@ -31,17 +35,20 @@ defmodule ExRack.FanRpm do
       Enum.map(
         data,
         fn {k, v} ->
-          {:ok, reference} = Circuits.GPIO.open(v, :input, pull_mode: :pullup)
-          Circuits.GPIO.set_interrupts(reference, :falling)
+          {:ok, reference} = Circuits.GPIO.open(v, :input, [{:pull_mode, :pullup}])
+          Circuits.GPIO.set_interrupts(reference, :falling, [{:suppress_glitches, true}])
 
           {k, reference}
         end
       )
 
-    state =
-      Enum.map(data, fn {k, v} ->
-        {k, %{gpio: v, rpm: 0, cycles: 0, reference: reference_map[k]}}
-      end)
+    state = %{
+      :fans =>
+        Enum.map(data, fn {k, v} ->
+          {k, %{gpio: v, rpm: 0, cycles: 0, reference: reference_map[k]}}
+        end),
+      :subscribed => []
+    }
 
     schedule_work()
     {:ok, state}
@@ -49,18 +56,25 @@ defmodule ExRack.FanRpm do
 
   @impl true
   def handle_call({:rpm, fan}, _from, state) do
-    {:reply, state[fan].rpm, state}
+    {:reply, state.fans[fan].rpm, state}
   end
 
   @impl true
   def handle_call(:rpm, _from, state) do
-    {:reply, Enum.map(state, fn {k, v} -> {k, v.rpm} end), state}
+    {:reply, Enum.map(state.fans, fn {k, v} -> {k, v.rpm} end), state}
+  end
+
+  @impl true
+  def handle_call(:subscribe, {pid, _}, state) do
+    subscribed_state = [state.subscribed | pid]
+
+    {:reply, :ok, Map.put(state, :subscribed, subscribed_state)}
   end
 
   @impl true
   def handle_info(:work, state) do
-    state =
-      Enum.map(state, fn {k, v} ->
+    fan_state =
+      Enum.map(state.fans, fn {k, v} ->
         rpm = v.cycles * 1_000 * 30 / @period
         :telemetry.execute([:fan, :rpm], %{rpm: rpm}, %{fan: k})
 
@@ -69,13 +83,13 @@ defmodule ExRack.FanRpm do
 
     schedule_work()
 
-    {:noreply, state}
+    {:noreply, Map.put(state, :fans, fan_state)}
   end
 
   @impl true
   def handle_info({:circuits_gpio, pin_number, _timestamp, _value}, state) do
-    state =
-      Enum.map(state, fn {k, v} ->
+    fan_state =
+      Enum.map(state.fans, fn {k, v} ->
         case v.gpio do
           ^pin_number ->
             {k, Map.put(v, :cycles, v.cycles + 1)}
@@ -85,7 +99,7 @@ defmodule ExRack.FanRpm do
         end
       end)
 
-    {:noreply, state}
+    {:noreply, Map.put(state, :fans, fan_state)}
   end
 
   defp schedule_work do

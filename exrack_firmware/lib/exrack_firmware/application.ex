@@ -34,7 +34,8 @@ defmodule ExRack.Application do
     [
       {ExRack.FanPwm, ExRack.FanPwm.config()},
       {ExRack.FanRpm, ExRack.FanRpm.config()},
-      {ExRack.DHT, ExRack.DHT.config()}
+#      {ExRack.DHT, ExRack.DHT.config()},
+#      {ExRack.FanPID, ExRack.FanPID.config()}
     ]
   end
 
