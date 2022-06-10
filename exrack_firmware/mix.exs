@@ -50,15 +50,15 @@ defmodule ExRack.MixProject do
       # bumps to Nerves systems. Since these include Linux kernel and Erlang
       # version updates, please review their release notes in case
       # changes to your application are needed.
-      {:nerves_system_rpi, "~> 1.17", runtime: false, targets: :rpi},
-      {:nerves_system_rpi0, "~> 1.17", runtime: false, targets: :rpi0},
-      {:nerves_system_rpi2, "~> 1.17", runtime: false, targets: :rpi2},
-      {:nerves_system_rpi3, "~> 1.17", runtime: false, targets: :rpi3},
-      {:nerves_system_rpi3a, "~> 1.17", runtime: false, targets: :rpi3a},
-      {:nerves_system_rpi4, "~> 1.17", runtime: false, targets: :rpi4},
-      {:nerves_system_bbb, "~> 2.12", runtime: false, targets: :bbb},
-      {:nerves_system_osd32mp1, "~> 0.8", runtime: false, targets: :osd32mp1},
-      {:nerves_system_x86_64, "~> 1.17", runtime: false, targets: :x86_64}
+      {:nerves_system_rpi, "~> 1.19", runtime: false, targets: :rpi},
+      {:nerves_system_rpi0, "~> 1.19", runtime: false, targets: :rpi0},
+      {:nerves_system_rpi2, "~> 1.19", runtime: false, targets: :rpi2},
+      {:nerves_system_rpi3, "~> 1.19", runtime: false, targets: :rpi3},
+      {:nerves_system_rpi3a, "~> 1.19", runtime: false, targets: :rpi3a},
+      {:nerves_system_rpi4, "~> 1.19", runtime: false, targets: :rpi4},
+      {:nerves_system_bbb, "~> 2.14", runtime: false, targets: :bbb},
+      {:nerves_system_osd32mp1, "~> 0.10", runtime: false, targets: :osd32mp1},
+      {:nerves_system_x86_64, "~> 1.19", runtime: false, targets: :x86_64}
     ]
   end
 
